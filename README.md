@@ -6,6 +6,23 @@
 
 Automatic Swagger/OpenAPI documentation middleware for [Hono](https://hono.dev/) applications. Generate beautiful, interactive API documentation with **zero configuration** and **automatic route discovery**!
 
+## 🎯 TL;DR
+
+```typescript
+import { Hono } from 'hono';
+import { swagger } from 'hono-swagger-ui';
+
+const app = new Hono();
+const swaggerUI = swagger(app, { title: 'My API' });
+app.use('*', swaggerUI.init());
+
+app.get('/users/:id', (c) => c.json({ id: c.req.param('id') }));
+
+// Visit /swagger-ui for interactive docs! 🚀
+```
+
+**3 lines of code** = Complete API documentation with interactive testing!
+
 ## ✨ Features
 
 - 🚀 **Zero Configuration** - Works out of the box with your existing Hono routes
@@ -31,7 +48,73 @@ yarn add hono-swagger-ui
 pnpm add hono-swagger-ui
 ```
 
-### Basic Usage
+### Simple Example
+
+Here's a complete working example:
+
+```typescript
+// app.ts
+import { Hono } from 'hono';
+import { swagger } from 'hono-swagger-ui';
+
+const app = new Hono();
+
+// Initialize swagger middleware
+const swaggerUI = swagger(app, {
+  title: 'My API',
+  version: '1.0.0',
+  description: 'A simple API example'
+});
+
+// Apply the swagger middleware
+app.use('*', swaggerUI.init());
+
+// Define your routes (these will be automatically documented)
+app.get('/', (c) => {
+  return c.json({ message: 'Hello World!' });
+});
+
+app.get('/users/:id', (c) => {
+  const id = c.req.param('id');
+  return c.json({ id, name: 'John Doe', email: 'john@example.com' });
+});
+
+app.post('/users', async (c) => {
+  const body = await c.req.json();
+  return c.json({ id: '123', ...body }, 201);
+});
+
+// Start the server
+const port = 3000;
+console.log(`🚀 Server running on http://localhost:${port}`);
+console.log(`📚 Swagger UI: http://localhost:${port}/swagger-ui`);
+
+export default {
+  port,
+  fetch: app.fetch,
+};
+```
+
+### Run the Example
+
+```bash
+# Install dependencies
+npm install hono hono-swagger-ui
+
+# Run with Bun
+bun run app.ts
+
+# Or with Node.js
+npx tsx app.ts
+```
+
+Visit `http://localhost:3000/swagger-ui` to see your interactive API documentation!
+
+> 💡 **Want to try it right now?** Copy the [simple-example.ts](./simple-example.ts) file and run it with `bun run simple-example.ts`!
+
+### Basic Usage with Auto-Scanning
+
+For larger applications with multiple routers:
 
 ```typescript
 import { Hono } from 'hono';
@@ -58,8 +141,6 @@ await swaggerUI.enableAutoScan('./src');
 
 export default app;
 ```
-
-That's it! Visit `/swagger-ui` to see your interactive documentation.
 
 ### Auto-Scanning with Routers
 
@@ -92,6 +173,27 @@ await swaggerUI.enableFileWatching('./src');
 ```
 
 Routes are automatically discovered and documented! 🚀
+
+### What You Get Out of the Box
+
+With just a few lines of code, you get:
+
+✅ **Interactive API Documentation** - Beautiful Swagger UI interface  
+✅ **Automatic Route Detection** - All your routes are documented automatically  
+✅ **Path Parameter Support** - `:id` becomes `{id}` in the documentation  
+✅ **HTTP Method Support** - GET, POST, PUT, DELETE all documented  
+✅ **Request/Response Examples** - See your API in action  
+✅ **Try It Out** - Test your endpoints directly from the UI  
+✅ **Mobile Responsive** - Works on all devices  
+
+### Quick Test
+
+After running the example above, you can:
+
+1. **View Documentation**: Visit `http://localhost:3000/swagger-ui`
+2. **Test Endpoints**: Click "Try it out" on any endpoint
+3. **See Parameters**: Path parameters like `:id` are automatically documented
+4. **Explore Responses**: See example responses for each endpoint
 
 ## 📖 Documentation
 
@@ -318,6 +420,54 @@ swaggerUI.addRoute({
 
 ## 🔧 Integration Examples
 
+### Different Ways to Use
+
+#### 1. **Simple Setup** (Recommended for beginners)
+```typescript
+import { Hono } from 'hono';
+import { swagger } from 'hono-swagger-ui';
+
+const app = new Hono();
+const swaggerUI = swagger(app, { title: 'My API' });
+app.use('*', swaggerUI.init());
+
+// Your routes here...
+app.get('/hello', (c) => c.json({ message: 'Hello!' }));
+
+export default app;
+```
+
+#### 2. **With Auto-Scanning** (For larger apps)
+```typescript
+import { Hono } from 'hono';
+import { swagger } from 'hono-swagger-ui';
+
+const app = new Hono();
+const swaggerUI = swagger(app, { title: 'My API' });
+app.use('*', swaggerUI.init());
+
+// Mount routers
+app.route('/api/users', usersRouter);
+app.route('/api/auth', authRouter);
+
+// Auto-detect all routes
+await swaggerUI.enableAutoScan('./src');
+```
+
+#### 3. **With File Watching** (For development)
+```typescript
+import { Hono } from 'hono';
+import { swagger } from 'hono-swagger-ui';
+
+const app = new Hono();
+const swaggerUI = swagger(app, { title: 'My API' });
+app.use('*', swaggerUI.init());
+
+// Auto-detect and watch for changes
+await swaggerUI.enableAutoScan('./src');
+await swaggerUI.enableFileWatching('./src');
+```
+
 ### With Bun
 
 ```typescript
@@ -402,6 +552,38 @@ This automatically generates proper OpenAPI schema with:
 - Min/max constraints
 - Enum values
 - Default values
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### Routes Not Showing Up?
+- Make sure you've applied the middleware: `app.use('*', swaggerUI.init())`
+- Check that your routes are defined after the middleware
+- For routers, use auto-scanning: `await swaggerUI.enableAutoScan('./src')`
+
+#### Getting 404 on `/swagger-ui`?
+- Ensure the middleware is applied before your routes
+- Check that the route path is correct (default: `/swagger-ui`)
+- Verify the server is running
+
+#### Auto-scanning Not Working?
+- Make sure the source path is correct: `./src`
+- Check that your routers use `new Hono()`
+- Ensure files have `.ts`, `.js`, `.tsx`, or `.jsx` extensions
+
+#### TypeScript Errors?
+```bash
+npm install @types/node typescript
+# or
+bun add -d @types/node typescript
+```
+
+### Getting Help
+
+- Check the [Auto-Scanning Guide](./AUTO_SCANNING_README.md) for detailed examples
+- Review the [Deprecation Notice](./DEPRECATION_NOTICE.md) if migrating from older versions
+- Open an issue on GitHub for bugs or feature requests
 
 ## 🛠️ Development
 

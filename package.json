@@ -15,8 +15,6 @@
     "prepublishOnly": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
     "buildAndPublish": "npm run build && npm publish --access public"
 
   },

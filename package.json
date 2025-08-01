@@ -30,12 +30,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/hono-swagger-ui.git"
+    "url": "https://github.com/algodomain/hono-swagger-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/hono-swagger-ui/issues"
+    "url": "https://github.com/algodomain/hono-swagger-ui/issues"
   },
-  "homepage": "https://github.com/yourusername/hono-swagger-ui#readme",
+  "homepage": "https://github.com/algodomain/hono-swagger-ui#readme",
   "peerDependencies": {
     "hono": "^3.0.0 || ^4.0.0",
     "zod": "^3.20.0"

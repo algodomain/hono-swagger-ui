@@ -1,0 +1,41 @@
+# Source files
+src/
+tests/
+example/
+scripts/
+
+# Configuration files
+tsconfig.json
+jest.config.js
+.eslintrc.js
+.prettierrc
+.github/
+
+# Development files
+*.test.ts
+*.spec.ts
+*.test.js
+*.spec.js
+
+# Documentation
+README.md
+LICENSE
+
+# Build scripts
+build_scripts.txt
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp 

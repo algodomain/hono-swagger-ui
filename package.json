@@ -1,0 +1,64 @@
+{
+  "name": "hono-swagger-ui",
+  "version": "1.0.2",
+  "description": "Automatic Swagger UI middleware for Hono applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "buildAndPublish": "npm run build && npm publish --access public"
+
+  },
+  "keywords": [
+    "hono",
+    "swagger",
+    "openapi",
+    "api-documentation",
+    "middleware",
+    "typescript",
+    "swagger-ui"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/hono-swagger-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/hono-swagger-ui/issues"
+  },
+  "homepage": "https://github.com/yourusername/hono-swagger-ui#readme",
+  "peerDependencies": {
+    "hono": "^3.0.0 || ^4.0.0",
+    "zod": "^3.20.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "hono": "^4.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0",
+    "zod": "^3.22.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.2"
+  }
+}
